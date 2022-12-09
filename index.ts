@@ -34,6 +34,8 @@ app.post('/webhook', (req, res) => {
 
     https.request(options, callback).end();
   }
+  res.status(200)
+  res.end('done')
 })
 
 app.listen(3010, () => {console.log('webhook serve on :3010')})
