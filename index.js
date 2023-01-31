@@ -29,4 +29,5 @@ app.post('/webhook', function (req, res) {
     res.status(200);
     res.end('done');
 });
-app.listen(3010, function () { console.log('webhook serve on :3010'); });
+var port = process.env.SERVER_PORT || 3010;
+app.listen(port, function () { console.log('webhook serve on :' + port); });

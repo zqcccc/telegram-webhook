@@ -38,4 +38,5 @@ app.post('/webhook', (req, res) => {
   res.end('done')
 })
 
-app.listen(3010, () => {console.log('webhook serve on :3010')})
+const port = process.env.SERVER_PORT || 3010
+app.listen(port, () => {console.log('webhook serve on :' + port)})
