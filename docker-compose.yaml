@@ -7,4 +7,4 @@ services:
       - ./.env:/app/.env
     #   - ./json:/usr/share/nginx/html/json
     ports:
-      - 8090:8090
+      - 3010:3010
