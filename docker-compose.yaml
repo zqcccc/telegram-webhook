@@ -3,8 +3,8 @@ services:
   telegram-webhook:
     image: 172232502/telegram-webhook:latest
     restart: always
-    # volumes:
-    #   - ./config.json:/ServerStatus/server/config.json
+    volumes:
+      - ./.env:/app/.env
     #   - ./json:/usr/share/nginx/html/json
     ports:
       - 8090:8090
