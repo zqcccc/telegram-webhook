@@ -3,6 +3,9 @@ var http = require('http');
 var express = require('express');
 var app = express();
 app.use(express.json());
+app.get('/', function (req, res) {
+    res.end('hello world');
+});
 app.post('/webhook', function (req, res) {
     var _a, _b;
     var body = req.body;

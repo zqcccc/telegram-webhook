@@ -6,6 +6,10 @@ const app = express()
 
 app.use(express.json())
 
+app.get('/', (req, res) => {
+  res.end('hello world')
+})
+
 app.post('/webhook', (req, res) => {
   
   let body = req.body;
