@@ -39,6 +39,7 @@ require('dotenv').config({ override: true });
 var http = require('http');
 var express = require('express');
 var axios = require('axios');
+var _a = require('./db'), operationWhenExpire = _a.operationWhenExpire, setExpire = _a.setExpire;
 var app = express();
 app.use(express.json());
 app.get('/', function (req, res) {
@@ -52,16 +53,17 @@ app.post('/webhook', function (req, res) { return __awaiter(_this, void 0, void 
         console.log("body: ", JSON.stringify(body, null, 2));
         if (((_a = body === null || body === void 0 ? void 0 : body.message) === null || _a === void 0 ? void 0 : _a.new_chat_member) || ((_b = body === null || body === void 0 ? void 0 : body.message) === null || _b === void 0 ? void 0 : _b.left_chat_member)) {
             console.log("delete message ".concat(body.message.message_id, " in chat ").concat(body.message.chat.id));
-            setTimeout(function () {
-                axios.get("https://api.telegram.org/bot".concat(process.env.BOT_TOKEN2, "/deleteMessage"), {
-                    params: {
-                        chat_id: body.message.chat.id,
-                        message_id: body.message.message_id
-                    }
-                })["catch"](function (e) {
-                    console.log(e.message);
-                });
-            }, 3000);
+            // setTimeout(() => {
+            //   axios.get(`https://api.telegram.org/bot${process.env.BOT_TOKEN2}/deleteMessage`, {
+            //     params: {
+            //       chat_id: body.message.chat.id,
+            //       message_id: body.message.message_id
+            //     }
+            //   }).catch(e => {
+            //     console.log(e.message)
+            //   })
+            // }, 3000);
+            setExpire("".concat(body.message.chat.id, ":").concat(body.message.message_id), 48 * 60 * 60 * 1000);
         }
         else if (((_c = body === null || body === void 0 ? void 0 : body.message) === null || _c === void 0 ? void 0 : _c.text) === "/geturl" && ((_d = body === null || body === void 0 ? void 0 : body.message) === null || _d === void 0 ? void 0 : _d.chat)) {
             https = require("https");
@@ -87,5 +89,20 @@ app.post('/webhook', function (req, res) { return __awaiter(_this, void 0, void 
         return [2 /*return*/];
     });
 }); });
+setInterval(function () {
+    operationWhenExpire(function (key) {
+        var _a = key.split(':'), chatId = _a[0], messageId = _a[1];
+        axios.get("https://api.telegram.org/bot".concat(process.env.BOT_TOKEN2, "/deleteMessage"), {
+            params: {
+                chat_id: chatId,
+                message_id: messageId
+                // chat_id: body.message.chat.id,
+                // message_id: body.message.message_id
+            }
+        })["catch"](function (e) {
+            console.log(e.message);
+        });
+    });
+}, 24 * 60 * 60 * 1000);
 var port = process.env.SERVER_PORT || 4010;
 app.listen(port, function () { console.log('webhook serve on :' + port); });
