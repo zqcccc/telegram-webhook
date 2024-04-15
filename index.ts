@@ -17,7 +17,7 @@ app.post('/webhook', async (req, res) => {
   let body = req.body;
   console.log("body: ", JSON.stringify(body, null, 2));
   if (body?.message?.new_chat_member || body?.message?.left_chat_member) {
-    console.log(`delete message ${body.message.message_id} in chat ${body.message.chat.id}`)
+    console.log(`delete message ${body.message.message_id} in chat ${body.message.chat.id} after 25 hours.`)
     // setTimeout(() => {
     //   axios.get(`https://api.telegram.org/bot${process.env.BOT_TOKEN2}/deleteMessage`, {
     //     params: {
@@ -28,7 +28,7 @@ app.post('/webhook', async (req, res) => {
     //     console.log(e.message)
     //   })
     // }, 3000);
-    setExpire(`${body.message.chat.id}:${body.message.message_id}`, 48 * 60 * 60 * 1000)
+    setExpire(`${body.message.chat.id}:${body.message.message_id}`, 25 * 60 * 60)
   } else if (body?.message?.text === "/geturl" && body?.message?.chat) {
     const https = require("https");
 
@@ -73,6 +73,20 @@ setInterval(() => {
     })
   })
 }, 24 * 60 * 60 * 1000);
+operationWhenExpire((key) => {
+  const [chatId, messageId] = key.split(':')
+  axios.get(`https://api.telegram.org/bot${process.env.BOT_TOKEN2}/deleteMessage`, {
+    params: {
+      chat_id: chatId,
+      message_id: messageId
+      // chat_id: body.message.chat.id,
+      // message_id: body.message.message_id
+    }
+  }).catch(e => {
+    console.log(e.message)
+    throw e
+  })
+})
 
 const port = process.env.SERVER_PORT || 4010
 app.listen(port, () => { console.log('webhook serve on :' + port) })
