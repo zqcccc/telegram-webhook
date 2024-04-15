@@ -21,6 +21,7 @@ async function operationWhenExpire(cb) {
         console.log('value: ', value)
         await cb(key.slice(toDeletePrefix.length))
         await kv.del(key)
+        console.log('key: ', key, 'has been deleted')
       }
     }
   }
@@ -33,36 +34,36 @@ async function setExpire(key, expire = 24 * 60 * 60) {
 module.exports.operationWhenExpire = operationWhenExpire
 module.exports.setExpire = setExpire
 
-// if(require.main === module) {
-//   ; (async function main() {
+if(require.main === module) {
+  ; (async function main() {
   
-//     // setExpire('hello')
+    // setExpire('hello')
   
-//     // kv.keys('toDelete:*').then(console.log)
+    // kv.keys('*').then(console.log)
   
-//     // kv.del('toDelete:test1').then(console.log)
-//     // kv.del('toDelete:test2').then(console.log)
+    // kv.del('toDelete:test1').then(console.log)
+    // kv.del('toDelete:test2').then(console.log)
     
-//     // operationWhenExpire(async (key) => {
-//     //   console.log('key: ', key)
-//     //   // await kv.delete(`toDelete:${key}`)
-//     // })
-//     // // 获取当前时间的时间戳
-//     // let currentTimeStamp = Date.now();
+    // operationWhenExpire(async (key) => {
+    //   console.log('key: ', key)
+    //   // await kv.delete(`toDelete:${key}`)
+    // })
+    // // 获取当前时间的时间戳
+    // let currentTimeStamp = Date.now();
   
-//     // // 将时间戳转换为 Date 对象
-//     // let currentDate = new Date(currentTimeStamp);
+    // // 将时间戳转换为 Date 对象
+    // let currentDate = new Date(currentTimeStamp);
   
-//     // // 一天的毫秒数
-//     // let oneDayMilliseconds = 24 * 60 * 60 * 1000;
+    // // 一天的毫秒数
+    // let oneDayMilliseconds = 24 * 60 * 60 * 1000;
   
-//     // // 计算一天后的时间戳
-//     // let nextDayTimeStamp = currentTimeStamp + oneDayMilliseconds;
+    // // 计算一天后的时间戳
+    // let nextDayTimeStamp = currentTimeStamp + oneDayMilliseconds;
   
-//     // // 创建新的 Date 对象，表示一天后的时间
-//     // let nextDayDate = new Date(nextDayTimeStamp).toLocaleString();
+    // // 创建新的 Date 对象，表示一天后的时间
+    // let nextDayDate = new Date(nextDayTimeStamp).toLocaleString();
   
-//     // console.log(nextDayDate);
-//   })()
-// }
+    // console.log(nextDayDate);
+  })()
+}
 
