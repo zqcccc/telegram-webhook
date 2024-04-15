@@ -89,8 +89,8 @@ app.post('/webhook', function (req, res) { return __awaiter(_this, void 0, void 
         return [2 /*return*/];
     });
 }); });
-setInterval(function () {
-    operationWhenExpire(function (key) {
+var checkNeedDeleteMsg = function () {
+    return operationWhenExpire(function (key) {
         var _a = key.split(':'), chatId = _a[0], messageId = _a[1];
         axios.get("https://api.telegram.org/bot".concat(process.env.BOT_TOKEN2, "/deleteMessage"), {
             params: {
@@ -101,22 +101,11 @@ setInterval(function () {
             }
         })["catch"](function (e) {
             console.log(e.message);
+            throw e;
         });
     });
-}, 24 * 60 * 60 * 1000);
-operationWhenExpire(function (key) {
-    var _a = key.split(':'), chatId = _a[0], messageId = _a[1];
-    axios.get("https://api.telegram.org/bot".concat(process.env.BOT_TOKEN2, "/deleteMessage"), {
-        params: {
-            chat_id: chatId,
-            message_id: messageId
-            // chat_id: body.message.chat.id,
-            // message_id: body.message.message_id
-        }
-    })["catch"](function (e) {
-        console.log(e.message);
-        throw e;
-    });
-});
+};
+setInterval(checkNeedDeleteMsg, 3 * 60 * 60 * 1000);
+checkNeedDeleteMsg();
 var port = process.env.SERVER_PORT || 4010;
 app.listen(port, function () { console.log('webhook serve on :' + port); });

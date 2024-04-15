@@ -39,7 +39,9 @@ if(require.main === module) {
   
     // setExpire('hello')
   
-    // kv.keys('*').then(console.log)
+    kv.keys('*').then(console.log)
+
+    const nextTime = await kv.get('toDeleteInTGChat:-1002052336763:123')
   
     // kv.del('toDelete:test1').then(console.log)
     // kv.del('toDelete:test2').then(console.log)
@@ -49,7 +51,10 @@ if(require.main === module) {
     //   // await kv.delete(`toDelete:${key}`)
     // })
     // // 获取当前时间的时间戳
-    // let currentTimeStamp = Date.now();
+    let timeStamp1 = Date.now() + 24 * 60 * 60 * 1000;
+    console.log('time compare 24 hour:', nextTime > timeStamp1)
+    let timeStamp2 = Date.now() + 25 * 60 * 60 * 1000;
+    console.log('time compare 25 hour:', nextTime > timeStamp2)
   
     // // 将时间戳转换为 Date 对象
     // let currentDate = new Date(currentTimeStamp);

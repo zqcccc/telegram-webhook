@@ -57,8 +57,7 @@ app.post('/webhook', async (req, res) => {
   res.end('done')
 })
 
-
-setInterval(() => {
+const checkNeedDeleteMsg = () =>
   operationWhenExpire((key) => {
     const [chatId, messageId] = key.split(':')
     axios.get(`https://api.telegram.org/bot${process.env.BOT_TOKEN2}/deleteMessage`, {
@@ -70,23 +69,12 @@ setInterval(() => {
       }
     }).catch(e => {
       console.log(e.message)
+      throw e
     })
   })
-}, 24 * 60 * 60 * 1000);
-operationWhenExpire((key) => {
-  const [chatId, messageId] = key.split(':')
-  axios.get(`https://api.telegram.org/bot${process.env.BOT_TOKEN2}/deleteMessage`, {
-    params: {
-      chat_id: chatId,
-      message_id: messageId
-      // chat_id: body.message.chat.id,
-      // message_id: body.message.message_id
-    }
-  }).catch(e => {
-    console.log(e.message)
-    throw e
-  })
-})
+
+setInterval(checkNeedDeleteMsg, 3 * 60 * 60 * 1000);
+checkNeedDeleteMsg()
 
 const port = process.env.SERVER_PORT || 4010
 app.listen(port, () => { console.log('webhook serve on :' + port) })
